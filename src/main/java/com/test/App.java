@@ -4,6 +4,8 @@ import com.mongodb.DB;
 import com.test.controller.TestController;
 import com.test.dao.IConnection;
 import com.test.dao.MongoConnection;
+import com.test.entities.Dueño;
+import com.test.entities.Mascota;
 import com.test.entities.Persona;
 import com.test.factory.ConnectionFactory;
 
@@ -19,5 +21,10 @@ public class App
     	Persona persona = new Persona("Mabel", "2222222", "Mabel", 222222);
     	controller.insertEntity(persona);
     	
+    	Mascota mascota = new Mascota("leo", new Dueño("mabel"));
+    	controller.insertEntity(mascota);
+    	
+    	Dueño dueño = new Dueño("Rolon");
+    	controller.insertEntity(dueño);
     }
 }

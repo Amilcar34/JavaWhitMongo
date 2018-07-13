@@ -17,12 +17,17 @@ public class MongoConnection implements IConnection{
 	
 	public MongoConnection() {
 		MongoConnection.database = getConnection();
-
+		try {
+			mongoClient = new MongoClient("localhost", 27017);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 	
 	public DB getConnection() {
 				
-		if (database == null) {
+		if (database == null || mongoClient == null) {
 			try {
 				mongoClient = new MongoClient("localhost", 27017);	
 				database = mongoClient.getDB("TestFull");
@@ -34,6 +39,8 @@ public class MongoConnection implements IConnection{
 	}
 
 	public boolean insert(Object elemnt) {
+		database = getConnection();
+		
 		Gson gson = new Gson();
 		DBObject dbObject = (BasicDBObject) JSON.parse(gson.toJson(elemnt));
 		DBCollection collection;
