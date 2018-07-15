@@ -2,7 +2,7 @@ package com.test.factory;
 
 import java.net.UnknownHostException;
 
-import com.test.dao.IConnection;
+import com.test.dao.ITransaction;
 import com.test.dao.MongoConnection;
 import com.test.dao.XAMPConnection;
 import com.test.entities.Persona;

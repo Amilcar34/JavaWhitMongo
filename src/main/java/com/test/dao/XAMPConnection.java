@@ -2,11 +2,12 @@ package com.test.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.List;
 
-public class XAMPConnection implements IConnection {
+public class XAMPConnection extends com.test.dao.Connection {
 
 	
-	public Connection getConnection() {
+	protected Connection getConnection() {
 
 		final String user = "root";
 		final String password = "";
@@ -32,6 +33,10 @@ public class XAMPConnection implements IConnection {
 		return false;
 	}
 
+	public <T> List<T> getAllEntityes(Object entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	
 }
