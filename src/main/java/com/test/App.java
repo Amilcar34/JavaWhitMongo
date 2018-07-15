@@ -26,7 +26,7 @@ public class App
 //    	
 //    	Dueño dueño = new Dueño("Rolon");
 //    	controller.insertEntity(dueño);
-    	controller.getAllEnrtity();
+    	controller.getAllEnrtity(new Persona());
     	
     }
 }

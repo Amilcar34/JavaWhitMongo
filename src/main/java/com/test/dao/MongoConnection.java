@@ -4,9 +4,9 @@ import java.lang.reflect.Field;
 import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -14,7 +14,6 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.util.JSON;
-import com.test.entities.Persona;
 
 public class MongoConnection extends Connection{
 	
@@ -86,5 +85,10 @@ public class MongoConnection extends Connection{
 	}
 	
 	
-
+	static <T> List<T> filter(Class<T> clazz, List<?> items) {
+	    return (List<T>) items.stream()
+	        .filter(clazz::isInstance)
+	        .map(clazz::cast)
+	        .collect(Collectors.toList());
+	}
 }

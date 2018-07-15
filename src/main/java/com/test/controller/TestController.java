@@ -8,17 +8,17 @@ import com.test.factory.ConnectionFactory;
 
 public class TestController {
 
-	public <T> boolean insertEntity(T object) {
+	public <T> boolean insertEntity(T entity) {
 		
        	ITransaction iConnection = ConnectionFactory.getMongoConnection();
-    	iConnection.insert(object);
+    	iConnection.insert(entity);
     	return true;
 	}
 	
-	public <T> T getAllEnrtity() {
+	public <T> T getAllEnrtity(T entity) {
 		
 		ITransaction iConnection = ConnectionFactory.getMongoConnection();
-		iConnection.<Persona>getAllEntityes(new Persona());
+		iConnection.<Persona>getAllEntityes(entity);
 		System.out.println("paso el controller");
 		return (T) new TestController();
 	}
