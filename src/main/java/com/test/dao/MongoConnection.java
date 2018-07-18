@@ -14,6 +14,7 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.util.JSON;
+import com.test.entities.Persona;
 
 public class MongoConnection extends Connection{
 	
@@ -65,23 +66,23 @@ public class MongoConnection extends Connection{
 
 		try {
 			Class classEntity = Class.forName("com.test.entities." + entity.getClass().getSimpleName());
-			Field[] fields = classEntity.getDeclaredFields();
+		//	Field[] fields = classEntity.getDeclaredFields();
 			
 			while (cursor.hasNext()) {
 				DBObject dbObject = (DBObject) cursor.next();
 				String string = dbObject.toString();
 				Object objectClass = gson.fromJson(string, Class.forName("com.test.entities." + entity.getClass().getSimpleName()));
-				System.out.println(objectClass);
+				
+				
+				System.out.println(objectClass.getClass());
 			}
-			
-			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		Persona persona;
 			
-		return null;
+		return filter(persona.getClass(), collection.find());
 	}
 	
 	
