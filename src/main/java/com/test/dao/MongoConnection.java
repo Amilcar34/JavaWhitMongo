@@ -16,64 +16,69 @@ import com.mongodb.MongoClient;
 import com.mongodb.util.JSON;
 import com.test.entities.Persona;
 
-public class MongoConnection extends Connection{
-	
+public class MongoConnection extends Connection {
+
 	private static final Object[] T = null;
 	private static DB database = null;
 	private static MongoClient mongoClient = null;
 	private static Gson gson = new Gson();
-	
+
 	public MongoConnection() {
-		MongoConnection.database = getConnection();
+		database = getConnection();
 		try {
 			mongoClient = new MongoClient("localhost", 27017);
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		}
 	}
-	
+
 	protected DB getConnection() {
-				
+
 		if (database == null || mongoClient == null) {
 			try {
-				mongoClient = new MongoClient("localhost", 27017);	
+				mongoClient = new MongoClient("localhost", 27017);
 				database = mongoClient.getDB("TestFull");
-			} catch (UnknownHostException e) { 
-				e.printStackTrace();	
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
 			}
 		}
-		return database;		
+		return database;
 	}
 
 	public boolean insert(Object elemnt) {
-		database = getConnection();	
-		DBObject dbObject = (BasicDBObject) JSON.parse(gson.toJson(elemnt));
-		DBCollection collection;
-		collection = database.getCollection(elemnt.getClass().getSimpleName());
-		collection.insert(dbObject);
-		mongoClient.close();
-		return true;
+		try {
+			database = getConnection();
+			DBObject dbObject = (BasicDBObject) JSON.parse(gson.toJson(elemnt));
+			DBCollection collection;
+			collection = database.getCollection(elemnt.getClass().getSimpleName());
+			collection.insert(dbObject);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			mongoClient.close();
+			return true;
+		}
 	}
 
 	public <T> List<T> getAllEntityes(Object entity) {
-		
+
 		database = getConnection();
 		DBCollection collection = database.getCollection(entity.getClass().getSimpleName());
 		DBCursor cursor = collection.find();
-		
+
 		Iterator<DBObject> iterator = cursor.iterator();
 
 		try {
 			Class classEntity = Class.forName("com.test.entities." + entity.getClass().getSimpleName());
-		//	Field[] fields = classEntity.getDeclaredFields();
-			
+			// Field[] fields = classEntity.getDeclaredFields();
+
 			while (cursor.hasNext()) {
 				DBObject dbObject = (DBObject) cursor.next();
 				String string = dbObject.toString();
-				Object objectClass = gson.fromJson(string, Class.forName("com.test.entities." + entity.getClass().getSimpleName()));
-				
-				
+				Object objectClass = gson.fromJson(string,
+						Class.forName("com.test.entities." + entity.getClass().getSimpleName()));
+
 				System.out.println(objectClass.getClass());
 			}
 		} catch (ClassNotFoundException e) {
@@ -81,15 +86,11 @@ public class MongoConnection extends Connection{
 			e.printStackTrace();
 		}
 		Persona persona;
-			
-		return filter(persona.getClass(), collection.find());
+
+		return null;
 	}
-	
-	
+
 	static <T> List<T> filter(Class<T> clazz, List<?> items) {
-	    return (List<T>) items.stream()
-	        .filter(clazz::isInstance)
-	        .map(clazz::cast)
-	        .collect(Collectors.toList());
+		return (List<T>) items.stream().filter(clazz::isInstance).map(clazz::cast).collect(Collectors.toList());
 	}
 }
